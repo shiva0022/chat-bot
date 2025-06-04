@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
         <Navbar />
-        <div className="flex gap-20">
+        <div className="flex">
           <Sidebar />
           <Hero />
         </div>

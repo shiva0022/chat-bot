@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); */
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -17,23 +17,26 @@
 }
 
 body {
-  background: linear-gradient(to bottom right, rgb(36, 35, 35), rgb(0, 0, 0));
+  background: linear-gradient(to bottom left, rgb(20, 4, 31), rgb(0, 0, 0));
 }
 
 header {
-  background: linear-gradient(to right, rgb(26, 26, 26), rgb(20, 19, 19));
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.6), rgba(20, 4, 31, 0.6));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .auth-buttons button {
+  font-family: monospace;
   padding: 1px;
-  width: 62px;
-  background-color: #4682B4; /* Metallic blue */
+  height: 26px;
+  width: 58px;
+  background-color: #e7d6fce5; 
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   color: #000000;
   cursor: pointer;
 }
-
 .sign-out-button {
   width: 16px;
   height: 16px;
@@ -45,9 +48,11 @@ header {
   position: relative;
 }
 
-.sign-out-button:hover::after {
+.sign-out-button::after {
   content: "SignOut";
   position: absolute;
+  opacity: 0;
+  visibility: hidden;
   filter: invert(1);
   padding: 4px 8px;
   border-radius: 4px;
@@ -56,7 +61,25 @@ header {
   white-space: nowrap;
   top: 100%;
   left: 50%;
-  transform: translate(-54%, -42%);
+  transform: translate(-50%, 10px);
   margin-top: 8px;
   z-index: 1;
+  pointer-events: none;
+  transition: none;
+}
+
+.sign-out-button:hover::after {
+  visibility: visible;
+  animation: slideUpFadeIn 300ms ease forwards;
+}
+
+@keyframes slideUpFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0px);
+  }
 }

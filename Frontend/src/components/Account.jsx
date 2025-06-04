@@ -13,7 +13,7 @@ const Account = () => {
 
     return (
         <div className="flex items-center mr-4 gap-4">
-            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-gray-200 font-medium">
+            <div className="w-8 h-8 flex items-center justify-center bg-[#a970ff]/20 backdrop-blur-sm border-0 text-white rounded-full hover:border-violet-500 hover:shadow-[0_0_8px_#a855f7] transition duration-200">
                 {getInitials(user.firstName, user.lastName)}
             </div>
             <button 

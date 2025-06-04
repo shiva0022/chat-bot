@@ -6,7 +6,7 @@ const Log = () => {
       className="w-full cursor-pointer log"
       onClick={() => alert("loadPreviousChat")}
     >
-      Log khakjhkjhsdjhka fjhsdafnsdf skjdf
+      Log Previous Chat History kklknb
     </div>
   );
 };

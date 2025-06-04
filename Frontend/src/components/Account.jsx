@@ -17,7 +17,7 @@ const Account = () => {
                 {getInitials(user.firstName, user.lastName)}
             </div>
             <button 
-                className="sign-out-button"
+                className="sign-out-button cursor-pointer"
                 onClick={() => alert('Signed out successfully!')} 
             />
         </div>

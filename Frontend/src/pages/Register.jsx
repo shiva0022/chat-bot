@@ -13,10 +13,12 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // TODO: Implement registration logic
     console.log("Registration attempt with:", { name, email, password, confirmPassword });
   };
 
   const handleGoogleSignIn = () => {
+    // TODO: Implement Google sign-in logic
     console.log("Google sign in clicked");
   };
 

@@ -40,7 +40,7 @@ const SearchInput = () => {
           className="p-2 rounded-full bg-gradient-to-r from-[#a970ff] via-[#8a4fff] to-[#6a3fff] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#a970ff]/20"
         >
           <RocketLaunchIcon
-            className="w-6 h-6 text-white"
+            className="w-6 h-6 text-white cursor-pointer"
             strokeWidth={2.5}
           />
         </button>

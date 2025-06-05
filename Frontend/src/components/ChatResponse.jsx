@@ -3,7 +3,7 @@ import Welcome from "./Welcome";
 import Responses from "./Responses";
 
 const ChatResponse = () => {
-  const [responses, setResponses] = useState([1]);
+  const [responses, setResponses] = useState([]);
 
   return (
     <div className="h-full w-full">

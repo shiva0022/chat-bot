@@ -4,7 +4,7 @@ import AuthButtons from "./AuthButtons";
 import Account from "./Account";
 
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
 
   return (
     <header className="h-16 px-6 relative">

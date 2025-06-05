@@ -7,8 +7,8 @@ const Log = () => {
       onClick={() => alert("loadPreviousChat")}
     >
       <div className="flex items-center gap-2">
-        <div className="w-2 h-2 rounded-full bg-[#a970ff]"></div>
-        <span className="truncate">Previous Chat History</span>
+        {/* <div className="w-2 h-2 rounded-full bg-[#a970ff]"></div> */}
+        <span className="truncate">Previous Chat History hjj jknsaj JN AknlanKANKNak</span>
       </div>
     </div>
   );

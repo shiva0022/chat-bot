@@ -24,7 +24,7 @@ const Register = () => {
 
   return (
     <FormContainer title="Create Account">
-      <form onSubmit={handleSubmit} className="space-y-3 relative">
+      <form onSubmit={handleSubmit} method="post" className="space-y-3 relative">
         <div className="space-y-3">
           <FormInput
             label="Full Name"

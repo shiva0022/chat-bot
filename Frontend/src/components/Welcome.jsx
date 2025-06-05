@@ -6,11 +6,11 @@ const Welcome = () => {
     <div className="flex flex-col items-center gap-6 py-8">
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-[#a970ff]/20 via-[#8a4fff]/20 to-[#6a3fff]/20 rounded-full blur-2xl"></div>
-        <img
+      <img
           className="w-48 h-48 relative z-10 drop-shadow-[0_0_15px_#a970ff] hover:scale-105 transition-transform duration-300"
-          src={logo}
-          alt="logo-img"
-        />
+        src={logo}
+        alt="logo-img"
+      />
       </div>
       
       <div className="text-center space-y-4">

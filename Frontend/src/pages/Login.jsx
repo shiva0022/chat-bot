@@ -21,7 +21,7 @@ const Login = () => {
 
   return (
     <FormContainer title="Welcome Back">
-      <form onSubmit={handleSubmit} className="space-y-3 relative">
+      <form onSubmit={handleSubmit} method="post" className="space-y-3 relative">
         <div className="space-y-3">
           <FormInput
             label="Email"

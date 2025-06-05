@@ -5,11 +5,8 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: linear-gradient(to bottom left, rgb(20, 4, 31), rgb(0, 0, 0));
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -31,7 +28,7 @@ header {
   padding: 1px;
   height: 26px;
   width: 58px;
-  background-color: #e7d6fce5; 
+  background-color: #e7d6fce5;
   border: none;
   border-radius: 6px;
   color: #000000;
@@ -65,7 +62,6 @@ header {
   margin-top: 8px;
   z-index: 1;
   pointer-events: none;
-  transition: none;
 }
 
 .sign-out-button:hover::after {
@@ -73,15 +69,15 @@ header {
   animation: slideUpFadeIn 300ms ease forwards;
 }
 
-.sidebar {
+.sidebar, .hero {
   background: linear-gradient(
     135deg,
     rgba(45, 18, 95, 0.3) 0%,
     rgba(87, 47, 110, 0.3) 100%
   );
-  box-shadow: 0 8px 24px rgba(44, 44, 47, 0.669); 
-  border-radius: 12px; 
-  color: rgba(210, 210, 210, 0.958); 
+  box-shadow: 0 8px 24px rgba(44, 44, 47, 0.669);
+  border-radius: 12px;
+  color: rgba(210, 210, 210, 0.958);
 }
 
 .log {
@@ -96,13 +92,13 @@ header {
   opacity: 0%;
   transition: all 300ms ease-in-out;
 }
-    
+
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(169, 112, 255, 0.264); 
+  background: rgba(169, 112, 255, 0.264);
   border-radius: 4px;
 }
 
@@ -113,17 +109,6 @@ header {
 .custom-scrollbar:hover::-webkit-scrollbar {
   opacity: 100%;
   width: 4px;
-}
-
-.hero {
-  background: linear-gradient(
-    135deg,
-    rgba(45, 18, 95, 0.3) 0%,
-    rgba(87, 47, 110, 0.3) 100%
-  );
-  box-shadow: 0 8px 24px rgba(44, 44, 47, 0.669); 
-  border-radius: 12px; 
-  color: rgba(210, 210, 210, 0.958); 
 }
 
 .input {

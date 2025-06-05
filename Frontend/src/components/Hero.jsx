@@ -4,11 +4,15 @@ import SearchInput from "./SearchInput";
 
 const Hero = () => {
   return (
-    <div className="m-3 h-[90vh] w-[76vw] flex flex-col items-center rounded-[8px] hero">
-      <div className="chat-response w-[96%] h-[74vh] my-2">
+    <div className="h-[calc(100vh-5rem)] w-[76vw] flex flex-col rounded-2xl bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#a970ff]/10 shadow-2xl relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#a970ff]/5 via-transparent to-[#8a4fff]/5"></div>
+
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-4 relative">
         <ChatResponse />
       </div>
-      <div className="search-input">
+
+      <div className="p-4 border-t border-[#a970ff]/10 relative">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
         <SearchInput />
       </div>
     </div>

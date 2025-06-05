@@ -21,11 +21,11 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="input-search">
+    <div className="relative">
       <form className="flex gap-4 items-center">
-        <div className="w-[40vw] mx-h-[10vh] p-3 pl-5 rounded-[20px] transition-all input">
+        <div className="w-full bg-[#0a0a0a]/50 border border-[#a970ff]/10 rounded-2xl p-3 pl-5 transition-all duration-300 hover:border-[#a970ff]/20 focus-within:border-[#a970ff] focus-within:ring-2 focus-within:ring-[#a970ff]/20">
           <textarea
-            className="font-mono text-xs resize-none w-full"
+            className="w-full bg-transparent text-white placeholder-gray-500 resize-none focus:outline-none font-mono text-sm"
             type="text"
             placeholder="Ask anything..."
             rows={1}
@@ -34,9 +34,13 @@ const SearchInput = () => {
             ref={textareaRef}
           />
         </div>
-        <button type="button" onClick={() => alert("request sent")}>
+        <button 
+          type="button" 
+          onClick={() => alert("request sent")}
+          className="p-2 rounded-full bg-gradient-to-r from-[#a970ff] via-[#8a4fff] to-[#6a3fff] hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#a970ff]/20"
+        >
           <RocketLaunchIcon
-            className="w-6 h-6 text-white cursor-pointer hover:text-violet-500 transition duration-200 hover:drop-shadow-[0_0_8px_#a855f7]"
+            className="w-6 h-6 text-white"
             strokeWidth={2.5}
           />
         </button>

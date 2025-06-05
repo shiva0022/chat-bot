@@ -2,7 +2,6 @@ import React, { useState, useRef } from "react";
 import { RocketLaunchIcon } from "@heroicons/react/24/solid";
 
 const SearchInput = () => {
-
   const [inputValue, setInputValue] = useState("");
   const textareaRef = useRef(null);
 

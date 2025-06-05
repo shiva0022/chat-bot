@@ -1,5 +1,5 @@
-import React from 'react'
-import logo from '../assets/logo.png'
+import React from "react";
+import logo from "../assets/logo.png";
 
 const Welcome = () => {
   return (
@@ -14,6 +14,6 @@ const Welcome = () => {
       <p>How Can I help?</p>
     </div>
   );
-}
+};
 
 export default Welcome;

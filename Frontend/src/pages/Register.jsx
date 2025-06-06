@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import FormContainer from "../components/FormContainer";
 import FormInput from "../components/FormInput";
 import GoogleButton from "../components/GoogleButton";
@@ -11,20 +12,42 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement registration logic
-    console.log("Registration attempt with:", { name, email, password, confirmPassword });
+    console.log("Registration attempt with:", {
+      name,
+      email,
+      password,
+      confirmPassword,
+    });
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    try {
+      const res = await axios.post("http://localhost:5001/api/register", {
+        name,
+        email,
+        password,
+      });
+      console.log("Success:", res.data);
+    } catch (err) {
+      console.error("Error:", err.response.data);
+    }
   };
 
   const handleGoogleSignIn = () => {
-    // TODO: Implement Google sign-in logic
     console.log("Google sign in clicked");
+    window.location.href = "http://localhost:5001/api/auth/google";
   };
 
   return (
     <FormContainer title="Create Account">
-      <form onSubmit={handleSubmit} method="post" className="space-y-3 relative">
+      <form
+        onSubmit={handleSubmit}
+        method="post"
+        className="space-y-3 relative"
+      >
         <div className="space-y-3">
           <FormInput
             label="Full Name"
@@ -63,7 +86,7 @@ const Register = () => {
             required
           />
         </div>
-        
+
         <div className="flex items-center space-x-3">
           <input
             id="terms"
@@ -73,11 +96,17 @@ const Register = () => {
           />
           <label htmlFor="terms" className="text-sm text-gray-400">
             I agree to the{" "}
-            <a href="#" className="text-[#a970ff] hover:text-[#8a4fff] transition-colors">
+            <a
+              href="#"
+              className="text-[#a970ff] hover:text-[#8a4fff] transition-colors"
+            >
               Terms of Service
             </a>{" "}
             and{" "}
-            <a href="#" className="text-[#a970ff] hover:text-[#8a4fff] transition-colors">
+            <a
+              href="#"
+              className="text-[#a970ff] hover:text-[#8a4fff] transition-colors"
+            >
               Privacy Policy
             </a>
           </label>
@@ -96,7 +125,10 @@ const Register = () => {
 
         <p className="text-center text-gray-400 mt-4">
           Already have an account?{" "}
-          <Link to="/login" className="text-[#a970ff] hover:text-[#8a4fff] transition-colors font-medium">
+          <Link
+            to="/login"
+            className="text-[#a970ff] hover:text-[#8a4fff] transition-colors font-medium"
+          >
             Sign in
           </Link>
         </p>

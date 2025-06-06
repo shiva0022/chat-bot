@@ -1,142 +1,216 @@
-import express from 'express';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
-import { body, validationResult } from 'express-validator';
-import User from '../models/User.js';
+// import express from "express";
+// import bcrypt from "bcrypt";
+// import { OAuth2Client } from "google-auth-library";
+// import pool from "../db.js";
+// import dotenv from "dotenv";
+// dotenv.config();
+
+// const router = express.Router();
+// const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+// // Normal Registration
+// router.post("/register", async (req, res) => {
+//   const { name, email, password } = req.body;
+
+//   if (!name || !email || !password)
+//     return res.status(400).json({ message: "All fields are required" });
+
+//   try {
+//     const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+//     if (existingUser.rows.length > 0)
+//       return res.status(409).json({ message: "User already exists" });
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     await pool.query(
+//       "INSERT INTO users (name, email, password, auth_type) VALUES ($1, $2, $3, $4)",
+//       [name, email, hashedPassword, "normal"]
+//     );
+
+//     res.status(201).json({ message: "User registered successfully" });
+//   } catch (err) {
+//     console.error("Error in normal register:", err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
+
+// // Google Sign-In Registration & Login
+// router.post("/register/google", async (req, res) => {
+//   const { idToken } = req.body;
+//   if (!idToken) return res.status(400).json({ message: "ID token is required" });
+
+//   try {
+//     // Verify token with Google
+//     const ticket = await googleClient.verifyIdToken({
+//       idToken,
+//       audience: process.env.GOOGLE_CLIENT_ID,
+//     });
+
+//     const payload = ticket.getPayload();
+//     const { email, name, sub: googleId } = payload;
+
+//     if (!email || !googleId)
+//       return res.status(400).json({ message: "Invalid Google token payload" });
+
+//     // Check if user exists
+//     const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+
+//     if (existingUser.rows.length === 0) {
+//       // Register new user
+//       await pool.query(
+//         "INSERT INTO users (name, email, google_id, auth_type) VALUES ($1, $2, $3, $4)",
+//         [name, email, googleId, "google"]
+//       );
+//     }
+
+//     // Here you might want to generate a JWT or session token for the user after login
+
+//     // res.redirect(process.env.FRONTEND_URL);
+//     res.status(200).json({ message: "Google user authenticated successfully", user: { name, email } });
+//   } catch (err) {
+//     console.error("Error in Google register/login:", err);
+//     res.status(401).json({ message: "Invalid Google ID token" });
+//   }
+// });
+
+// export default router;
+
+
+
+import express from "express";
+import bcrypt from "bcrypt";
+import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
+import pool from "../db.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = express.Router();
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Register route
-router.post('/register', [
-  body('firstName').trim().notEmpty().withMessage('First name is required'),
-  body('lastName').trim().notEmpty().withMessage('Last name is required'),
-  body('email').isEmail().withMessage('Please enter a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-], async (req, res) => {
+// 🌐 1. Normal Registration
+router.post("/register", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password)
+    return res.status(400).json({ message: "All fields are required" });
+
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (existingUser.rows.length > 0)
+      return res.status(409).json({ message: "User already exists" });
 
-    const { firstName, lastName, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Check if user already exists
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Create new user
-    user = new User({
-      firstName,
-      lastName,
-      email,
-      password
-    });
-
-    await user.save();
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
+    await pool.query(
+      "INSERT INTO users (name, email, password, auth_type) VALUES ($1, $2, $3, $4)",
+      [name, email, hashedPassword, "normal"]
     );
 
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
-      }
-    });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    console.error("Error in normal register:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// Login route
-router.post('/login', [
-  body('email').isEmail().withMessage('Please enter a valid email'),
-  body('password').exists().withMessage('Password is required')
-], async (req, res) => {
+// ✅ 2. Google Sign-In via ID Token (used for API-based frontend login, keep it)
+router.post("/register/google", async (req, res) => {
+  const { idToken } = req.body;
+  if (!idToken) return res.status(400).json({ message: "ID token is required" });
+
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { email, password } = req.body;
-
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Check password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
-    );
-
-    res.json({
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email
-      }
+    const ticket = await googleClient.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+
+    const payload = ticket.getPayload();
+    const { email, name, sub: googleId } = payload;
+
+    if (!email || !googleId)
+      return res.status(400).json({ message: "Invalid Google token payload" });
+
+    const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+
+    if (existingUser.rows.length === 0) {
+      await pool.query(
+        "INSERT INTO users (name, email, google_id, auth_type) VALUES ($1, $2, $3, $4)",
+        [name, email, googleId, "google"]
+      );
+    }
+
+    res.status(200).json({ message: "Google user authenticated successfully", user: { name, email } });
+  } catch (err) {
+    console.error("Error in Google register/login:", err);
+    res.status(401).json({ message: "Invalid Google ID token" });
   }
 });
 
-// Google OAuth routes
-router.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+// ✅ 3. Google OAuth Redirect Start (Option 1)
+router.get("/auth/google", (req, res) => {
+  const redirectUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    new URLSearchParams({
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+      response_type: "code",
+      scope: "openid email profile",
+      access_type: "offline",
+      prompt: "consent"
+    });
 
-router.get('/google/callback',
-  passport.authenticate('google', { session: false }),
-  (req, res) => {
-    const token = jwt.sign(
-      { userId: req.user._id },
-      process.env.JWT_SECRET || 'your-secret-key',
-      { expiresIn: '24h' }
+  res.redirect(redirectUrl);
+});
+
+// ✅ 4. Google OAuth Redirect Callback (handles code and redirects to frontend)
+router.get("/auth/google/callback", async (req, res) => {
+  const code = req.query.code;
+
+  try {
+    const tokenRes = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      new URLSearchParams({
+        code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: process.env.GOOGLE_REDIRECT_URI,
+        grant_type: "authorization_code"
+      }),
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      }
     );
 
-    // Redirect to frontend with token
-    res.redirect(`${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/callback?token=${token}`);
-  }
-);
+    const { id_token } = tokenRes.data;
 
-// Get current user
-router.get('/me',
-  passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    try {
-      const user = await User.findById(req.user.userId).select('-password');
-      res.json(user);
-    } catch (error) {
-      console.error('Get user error:', error);
-      res.status(500).json({ message: 'Server error' });
+    const ticket = await googleClient.verifyIdToken({
+      idToken: id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, sub: googleId } = payload;
+
+    if (!email || !googleId)
+      return res.redirect(`${process.env.FRONTEND_URL}/error?msg=Invalid%20Google%20user`);
+
+    // Check if user exists or register
+    const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+
+    if (existingUser.rows.length === 0) {
+      await pool.query(
+        "INSERT INTO users (name, email, google_id, auth_type) VALUES ($1, $2, $3, $4)",
+        [name, email, googleId, "google"]
+      );
     }
-  }
-);
 
-export default router; 
+    // ✅ Redirect to frontend with user info in query string
+    const redirectFrontend = `${process.env.FRONTEND_URL}/?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`;
+    return res.redirect(redirectFrontend);
+  } catch (err) {
+    console.error("Error in Google OAuth callback:", err.message);
+    return res.redirect(`${process.env.FRONTEND_URL}/error?msg=OAuth%20Failed`);
+  }
+});
+
+export default router;

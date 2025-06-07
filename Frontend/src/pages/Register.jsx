@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import FormContainer from "../components/FormContainer";
 import FormInput from "../components/FormInput";
@@ -11,6 +11,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,14 +26,24 @@ const Register = () => {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:5001/api/register", {
+      const res = await axios.post("http://localhost:5001/api/auth/register", {
         name,
         email,
         password,
       });
       console.log("Success:", res.data);
+      navigate("/login");
     } catch (err) {
-      console.error("Error:", err.response.data);
+      if (err.response?.status === 409) {
+        alert(
+          "🚫 User already exists. Please log in or use a different email."
+        );
+      } else if (err.response?.status === 400) {
+        alert("⚠️ Please fill in all required fields.");
+      } else {
+        console.error("Registration Error:", err.response?.data || err.message);
+        alert("❌ Something went wrong. Please try again later.");
+      }
     }
   };
 

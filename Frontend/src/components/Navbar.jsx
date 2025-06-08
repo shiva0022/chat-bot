@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import AuthButtons from "./AuthButtons";
 import Account from "./Account";
 
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLogged(true);
+      alert("Logged in");
+    }
+  }, []);
 
   return (
     <header className="h-16 px-6 relative">
@@ -19,9 +27,9 @@ const Navbar = () => {
             <span className="text-xs text-gray-400">Your AI Assistant</span>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-4">
-          {!isLogged ? <AuthButtons /> : <Account />}
+          {!isLogged ? <AuthButtons /> : <Account setIsLogged={setIsLogged} />}
         </div>
       </nav>
     </header>

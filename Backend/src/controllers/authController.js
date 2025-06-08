@@ -77,14 +77,12 @@ export const login = async (req, res) => {
 export const googleCallback = (req, res) => {
   // Passport attaches user to req.user
   if (!req.user) {
-    return res.status(401).json({ message: "Authentication failed" });
+    return res.redirect('http://localhost:5173/login?error=auth_failed');
   }
 
   const token = generateToken(req.user);
-
-  // You can either:
-  // 1. Redirect to frontend with token in URL (not recommended for production)
-  // 2. Send token in JSON (better for SPA with redirect from frontend)
-  // Here, let's send JSON:
-  res.status(200).json({ message: "Google login successful", token });
+  // localStorage.setItem("token", token);
+  
+  // Redirect to frontend with token
+  res.redirect(`http://localhost:5173/?token=${token}`);
 };

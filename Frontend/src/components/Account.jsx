@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 
-const Account = () => {
+const Account = ({ setIsLogged }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   // Mock user data - replace with actual user data from your auth system
   const user = {
     firstName: "Jakka",
@@ -16,7 +16,7 @@ const Account = () => {
 
   return (
     <div className="flex items-center mr-4 gap-3">
-      <div 
+      <div
         className="group relative"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -27,7 +27,11 @@ const Account = () => {
       </div>
       <button
         className="flex items-center gap-2 px-4 py-2 bg-[#7c3aed] text-white rounded-full hover:bg-[#6d28d9] transition-all duration-300 cursor-pointer shadow-[0_2px_10px_rgba(124,58,237,0.5)] hover:shadow-[0_2px_15px_rgba(124,58,237,0.7)]"
-        onClick={() => alert("Signed out successfully!")}
+        onClick={() => {
+          localStorage.removeItem("token");
+          setIsLogged(false);
+          alert("You have signed out successfully");
+        }}
       >
         <FaSignOutAlt className="w-4 h-4" />
         <span className="text-sm font-medium">Sign Out</span>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import FormContainer from "../components/FormContainer";
 import FormInput from "../components/FormInput";
@@ -12,6 +12,26 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check for token in URL after Google OAuth redirect
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    const error = params.get('error');
+
+    if (error === 'auth_failed') {
+      alert('Google authentication failed. Please try again.');
+      return;
+    }
+
+    if (token) {
+      // Store the token
+      localStorage.setItem('token', token);
+      // Redirect to home
+      navigate('/');
+    }
+  }, [location, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,6 +1,11 @@
 import "./App.css";
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
 import Home from "./pages/Home";
@@ -10,6 +15,20 @@ import PageTransition from "./components/PageTransition";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
+
+      // 🔄 Optional: Remove token from URL after storing it
+      const url = new URL(window.location);
+      url.searchParams.delete("token");
+      window.history.replaceState({}, document.title, url.toString());
+    }
+  }, []);
 
   return (
     <AnimatePresence mode="wait">

@@ -10,7 +10,7 @@ const Navbar = () => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLogged(true);
-      alert("Logged in");
+      // alert("Logged in");
     }
   }, []);
 
